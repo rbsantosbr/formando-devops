@@ -274,7 +274,7 @@ EOF
 
 Aumente a partição LVM `sdb1` para `5Gi` e expanda o filesystem para o tamanho máximo.
 
-```bash
+```
   pvs
 
   umount /data
@@ -300,7 +300,7 @@ Aumente a partição LVM `sdb1` para `5Gi` e expanda o filesystem para o tamanho
 
 Crie uma partição LVM `sdb2` com `5Gi` e formate com o filesystem `ext4`.
 
-```bash
+```
 
   cfdisk /dev/sdb (criar partição sdb2 do tipo LVM)
 
@@ -323,7 +323,7 @@ Crie uma partição LVM `sdb2` com `5Gi` e formate com o filesystem `ext4`.
 
 Utilizando o disco `sdc` em sua todalidade (sem particionamento), formate com o filesystem `xfs`.
 
-```bash
+```
 
   cfdisk /dev/sdc (criar partição sdc1 do tipo LVM)
 
