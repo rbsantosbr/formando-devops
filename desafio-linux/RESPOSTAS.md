@@ -36,12 +36,18 @@ Dica: lembre-se que você possui acesso "físico" ao host.
 
 * Acessar o modo single user do SO pressionando "e" durante a inicialização:
 * Editar a linha que inicia com linux, adicionando ao final o comando "rd.break"
-* Remontar a partição /sysroot em modo de escrita, e acessar a partição
+* Remontar a partição **/sysroot** em modo de escrita, e acessar a partição
 ```bash
-  mount -o remount,rx /sysroot
+  mount -o remount,rw /sysroot
   
   chroot /sysroot
 ```
+
+* Consultar o arquivo /etc/sudoers para localizar quais grupos possuem permissão de sudo:
+```bash
+  less /etc/sudoers
+```
+
 * Editar as permissões do usuário vagrant:
 ```bash
   usermod -aG wheel vagrant
@@ -103,7 +109,8 @@ Utilizando a chave do arquivo [id_rsa-desafio-linux-devel.gz.b64](id_rsa-desafio
 
 Dica: o arquivo pode ter sido criado em um SO que trata o fim de linha de forma diferente.
 
-* No host local:
+* No host local, corrigir o End Of Line - EOL do arquivo.
+  Neste exemplo estou utlizando o SO **Pop OS 22.04 (Debian base)** e a ferramenta dos2unix 
 
 ```bash
   sudo apt install -y dos2unix
@@ -112,11 +119,7 @@ Dica: o arquivo pode ter sido criado em um SO que trata o fim de linha de forma 
 
   ssh -i id_rsa devel@IP_DA_VM
 ```
-* Na VM:
 
-```bash
-  dos2unix /home/devel/authorized_keys
-```
 
 
 ## 4. Systemd - OK
@@ -131,18 +134,18 @@ curl http://127.0.0.1
 
 Dica: para iniciar o serviço utilize o comando `systemctl start nginx`.
 
-* Editar o arquivo /etc/nginx/nginx.conf:
+* Editar o arquivo **/etc/nginx/nginx.conf**:
 
 ```bash
-- Adicionar o ";" ao final da linha 8;
+- Adicionar o ";" ao final da linha 42;
 
 - Alterar as portas de listen para 80 (linhas 39 e 40)
 ```
 
-* Editar o arquivo /lib/systemd/system/nginx.service:
+* Editar o arquivo **/lib/systemd/system/nginx.service**:
 
 ```bash
-- Remover o parâmetro -BROKEN do comando ExecStart=/usr/sbin/nginx (linha 13) 
+- Remover o parâmetro -BROKEN comando ExecStart=/usr/sbin/nginx (linha 13) 
 ```
 
 * Atualizar o Daemon, iniciar o serviço e testar o acesso
@@ -162,17 +165,52 @@ Dica: para iniciar o serviço utilize o comando `systemctl start nginx`.
 Utilizando o comando de sua preferencia (openssl, cfssl, etc...) crie uma autoridade certificadora (CA) para o hostname `desafio.local`.
 Em seguida, utilizando esse CA para assinar, crie um certificado de web server para o hostname `www.desafio.local`.
 
+```bash
+
+echo "127.0.0.1    www.desafio.local" >> /etc/hosts
+
+mkdir /etc/nginx/certs && cd /etc/nginx/certs
+
+openssl genrsa -out ca.key 2048
+
+openssl req -new -key ca.key -subj "/CN=desafio.local" -out ca.csr
+
+openssl x509 -req -in ca.csr -signkey ca.key -out ca.crt
+
+openssl genrsa -out server.key 2048
+
+openssl req -new -key server.key -subj "/CN=www.desafio.local" -out server.csr
+
+openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out server.crt
+```
+
 ### 5.2 Uso de certificados
 
 Utilizando os certificados criados anteriormente, instale-os no serviço `nginx` de forma que este responda na porta `443` para o endereço
 `www.desafio.local`. Certifique-se que o comando abaixo executa com sucesso e responde o mesmo que o desafio `4`. Voce pode inserir flags no comando
 abaixo para utilizar seu CA.
 
-```
-curl https://www.desafio.local
-```
+* Habilitar as configurações SSL do NGINX no arquivo **/etc/nginx/nginx.conf**
+```bash
+server {
+        listen   *:443 ssl;
+        server_name  www.desafio.local;
 
-## 6. Rede
+        client_max_body_size 1024m;
+       
+        ssl_certificate      /etc/certs/server.crt;
+        ssl_certificate_key  /etc/certs/server.key;
+
+        location / {
+        }
+    }
+
+```
+* Testar a URL:
+```
+  curl --cacert /etc/nginx/certs/ca.crt https://www.desafio.local
+```
+## 6. Rede - OK
 
 ### 6.1 Firewall
 
@@ -210,6 +248,26 @@ access-control-allow-credentials: true
 
 Configure o `logrotate` para rotacionar arquivos do diretório `/var/log/nginx`
 
+* Criar o arquivo de configuração para o logrotate:
+
+```bash
+cat > logrotate-nginx.conf << EOF > /etc/logrotate-nginx.conf
+/var/log/nginx/* {
+  rotate 5
+  weekly
+  postrotate
+    /usr/bin/killall -HUP nginx
+  endscript
+}
+EOF
+```
+
+* Criar entrada no crontab para executar a tarefa e reiniciar o serviço:
+```bash
+  echo "* * * * 0 root logrotate -f /etc/logrotate-nginx.conf" >> /etc/crontab
+
+  systemctl restart crond
+```
 ## 7. Filesystem
 
 ### 7.1 Expandir partição LVM
@@ -217,28 +275,69 @@ Configure o `logrotate` para rotacionar arquivos do diretório `/var/log/nginx`
 Aumente a partição LVM `sdb1` para `5Gi` e expanda o filesystem para o tamanho máximo.
 
 ```bash
-  pvs ou pvdisplay
+  pvs
 
   umount /data
 
-  lvchange -a n /dev/data_vg...
+  lvchange -a n /dev/data_vg/data_lv
 
-  cfdisk /dev/sdb1
+  cfdisk /dev/sdb (resize da partição sdb1)
 
   pvresize /dev/sdb1
 
-  lvchange -a y /dev/data_vg...
+  lvchange -a y /dev/data_vg/data_lv 
 
- efsck -f  /dev/data_vg...
+  lvextend -L +4G /dev/data_vg/data_lv
 
- resize2fs /dev/data_vg...
+  efsck -f  /dev/data_vg/data_lv
 
- mount /data
+  resize2fs /dev/data_vg/data_lv
+
+  mount /data
+```
 
 ### 7.2 Criar partição LVM
 
 Crie uma partição LVM `sdb2` com `5Gi` e formate com o filesystem `ext4`.
 
+```bash
+
+  cfdisk /dev/sdb (criar partição sdb2 do tipo LVM)
+
+  pvcreate /dev/sdb2
+
+  vgcreate vg_data2 /dev/sdb2
+  
+  lvcreate -L 4.9G -n data2_lv vg_data2 
+
+  mkfs.ext4 /dev/vg_data2/data2_lv
+  
+  mkdir -p /data2
+
+  echo "/dev/vg_data2/data2_lv /data2 ext4 defaults 0 0" >> /etc/fstab
+  
+  mount /data2
+```
+
 ### 7.3 Criar partição XFS
 
 Utilizando o disco `sdc` em sua todalidade (sem particionamento), formate com o filesystem `xfs`.
+
+```bash
+
+  cfdisk /dev/sdc (criar partição sdc1 do tipo LVM)
+
+  pvcreate /dev/sdc1
+
+  vgcreate data3_vg /dev/sdc1
+  
+  lvcreate -L 9.9G -n data3_lv data3_vg
+
+  yum install -y xfsprogs (pacote de gerenciamento partições xfs)
+
+  mkfs.xfs /dev/data3_vg/data3_lv
+
+  echo "/dev/data3_vg/data3_lv /data3 xfs defaults 0 0" >> /etc/fstab
+
+  mount /data3
+```
