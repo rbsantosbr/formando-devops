@@ -32,9 +32,9 @@ Sua tarefa consiste em reativar a permissão no `sudo` para esse usuário.
 
 Dica: lembre-se que você possui acesso "físico" ao host.
 
-* Acessar o modo single user do SO pressionando "e" durante a inicialização:
-* Editar a linha que inicia com linux, adicionando ao final o comando "rd.break"
-* Remontar a partição **/sysroot** em modo de escrita, e acessar a partição
+* Acessar o modo single user do SO pressionando "e" durante a inicialização;
+* Editar a linha que inicia com linux, adicionando ao final o comando "rd.break";
+* Remontar a partição **/sysroot** em modo de escrita, e acessar a partição:
 ```bash
   mount -o remount,rw /sysroot
   
@@ -67,6 +67,7 @@ No contexto do usuário root:
 ```bash
   groupadd -g 2222 getup
   useradd -g 2222 -G bin -u 1111 getup
+  usermod -aG wheel getup
   echo "getup ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/getup
 ```
 ## 3. SSH
@@ -77,7 +78,7 @@ O servidor SSH está configurado para aceitar autenticação por senha. No entan
 pois apresenta alto nivel de fragilidade. Voce deve desativar autenticação por senhas e permitir apenas o uso
 de par de chaves.
 
-Editar o arquivo /etc/ssh/sshd_config e alterar as respectivas linhas com as opções:
+Editar o arquivo **/etc/ssh/sshd_config** e alterar as respectivas linhas com as opções:
 ```bash
   PermitRootLogin prohibit-password
 
