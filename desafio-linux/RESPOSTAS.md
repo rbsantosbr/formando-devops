@@ -1,5 +1,8 @@
 # Desafio Linux
 
+As questões abaixo devem ser respondidas no arquivo [RESPOSTAS.md](RESPOSTAS.md) em um fork desse repositório.
+O formato é livre. Quanto mais sucinto e direto, melhor. Envie o endereço do seu repositório para desafio@getupcloud.com.
+
 # Preparação do ambiente
 
 Sugerimos utilizar um sistema unix (linux, macos, \*bsd) ou [WSL](https://docs.microsoft.com/pt-br/windows/wsl/install).
@@ -45,7 +48,7 @@ Dica: lembre-se que você possui acesso "físico" ao host.
   less /etc/sudoers
 ```
 
-* Editar as permissões do usuário vagrant:
+* Editar as propriedades do usuário vagrant:
 ```bash
   usermod -aG wheel vagrant
   
@@ -64,7 +67,7 @@ Crie um usuário com as seguintes características:
 
 No contexto do usuário root:
 ```bash
-  group add -g 2222 getup
+  groupadd -g 2222 getup
   useradd -g 2222 -G bin -u 1111 getup
   echo "getup ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/getup
 ```
@@ -141,8 +144,8 @@ Dica: para iniciar o serviço utilize o comando `systemctl start nginx`.
 
 * Editar o arquivo **/lib/systemd/system/nginx.service**:
 
-```bash
-- Remover o parâmetro -BROKEN comando ExecStart=/usr/sbin/nginx (linha 13) 
+```
+- Remover o parâmetro -BROKEN do comando ExecStart=/usr/sbin/nginx (linha 13) 
 ```
 
 * Atualizar o Daemon, iniciar o serviço e testar o acesso
@@ -192,8 +195,6 @@ abaixo para utilizar seu CA.
 server {
         listen   *:443 ssl;
         server_name  www.desafio.local;
-
-        client_max_body_size 1024m;
        
         ssl_certificate      /etc/certs/server.crt;
         ssl_certificate_key  /etc/certs/server.key;
@@ -308,7 +309,11 @@ Crie uma partição LVM `sdb2` com `5Gi` e formate com o filesystem `ext4`.
   lvcreate -L 4.9G -n data2_lv vg_data2 
 
   mkfs.ext4 /dev/vg_data2/data2_lv
-  
+  ```
+
+  **EXTRA:**
+
+  ```bash
   mkdir -p /data2
 
   echo "/dev/vg_data2/data2_lv /data2 ext4 defaults 0 0" >> /etc/fstab
@@ -321,7 +326,6 @@ Crie uma partição LVM `sdb2` com `5Gi` e formate com o filesystem `ext4`.
 Utilizando o disco `sdc` em sua todalidade (sem particionamento), formate com o filesystem `xfs`.
 
 ```
-
   cfdisk /dev/sdc (criar partição sdc1 do tipo LVM)
 
   pvcreate /dev/sdc1
@@ -333,6 +337,10 @@ Utilizando o disco `sdc` em sua todalidade (sem particionamento), formate com o 
   yum install -y xfsprogs (pacote de gerenciamento partições xfs)
 
   mkfs.xfs /dev/data3_vg/data3_lv
+```
+**EXTRA:**
+```bash
+  mkdir -p /data3 
 
   echo "/dev/data3_vg/data3_lv /data3 xfs defaults 0 0" >> /etc/fstab
 
