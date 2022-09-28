@@ -108,9 +108,13 @@ Resources:
       GroupDescription: Enable HTTP from 0.0.0.0/0
       SecurityGroupIngress:
         - IpProtocol: tcp
-          FromPort: '81'
-          ToPort: '8080'
-          CidrIp: 1.1.1.1/1
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 0.0.0.0/0
       VpcId: !Ref VPC 
       
   EC2Instance:
@@ -129,7 +133,7 @@ Resources:
             #!/bin/bash
             yum install httpd -y
             service httpd start  
-            echo "<html><body><h1>Formando DevOps - EC2 Rodando na Region: ${AWS::Region}<h1></body></html>" > /var/www/html/index.html
+            echo "<html><body><h1>Roberto - Formando DevOps - EC2 Rodando na Region: ${AWS::Region}<h1></body></html>" > /var/www/html/index.html
 Outputs:
   PublicIp:
     Description: EC2 Instance Public Ip
