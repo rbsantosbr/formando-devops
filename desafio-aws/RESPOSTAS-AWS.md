@@ -61,7 +61,7 @@ Para esse desafio foi necessário adicionar liberação de conexão na porta 22 
 
 ![ssh](imagens/ssh.jpeg)
 
-Em seguida foi gerada uma chave ssh do tipo _rsa_, extraída a chave pública através do comando _ssh-keygen -y -f "<diretorio>/<arquivo>.pem_" e adicionado ao arquivo _.ssh/authorized_keys da instância.
+Em seguida foi gerada uma chave ssh do tipo _rsa_, extraída a chave pública através do comando _ssh-keygen -y -f \<diretorio>/\<arquivo>.pem_ e adicionado ao arquivo .ssh/authorized_keys da instância.
 
 Realizado o teste de acesso via ssh:
 
