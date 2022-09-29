@@ -115,8 +115,19 @@ Resources:
           FromPort: '22'
           ToPort: '22'
           CidrIp: 0.0.0.0/0
-      VpcId: !Ref VPC 
-      
+      VpcId: !Ref VPC
+
+  ELBSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Enable HTTP from 0.0.0.0/0
+      SecurityGroupIngress:
+          - IpProtocol: tcp
+            FromPort: '80'
+            ToPort: '80'
+            CidrIp: 0.0.0.0/0
+      VpcId: !Ref VPC
+
   EC2Instance:
     Type: AWS::EC2::Instance
     Properties:
@@ -133,7 +144,26 @@ Resources:
             #!/bin/bash
             yum install httpd -y
             service httpd start  
-            echo "<html><body><h1>Roberto - Formando DevOps - EC2 Rodando na Region: ${AWS::Region}<h1></body></html>" > /var/www/html/index.html
+            echo "<html><body><h1>Roberto Santos - Formando DevOps - EC2 Rodando na Region: ${AWS::Region}<h1></body></html>" > /var/www/html/index.html
+
+  EC2Instance2:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", AMI]
+      InstanceType: t2.micro
+      SubnetId: !Ref PublicSubnet1
+      SecurityGroupIds: 
+        - !Ref WebServerSecurityGroup
+      Tags:
+       - Key: Name
+         Value: Formando DevOps - AWS Challenge EC2-1     
+      UserData:
+        Fn::Base64: !Sub |
+            #!/bin/bash
+            yum install httpd -y
+            service httpd start  
+            echo "<html><body><h1>Roberto Santos - Formando DevOps - EC2 Rodando na Region: ${AWS::Region}<h1></body></html>" > /var/www/html/index.html          
+
 Outputs:
   PublicIp:
     Description: EC2 Instance Public Ip
