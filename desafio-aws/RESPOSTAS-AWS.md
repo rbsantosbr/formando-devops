@@ -92,10 +92,19 @@ systemctl enable httpd && systemctl start httpd
 
 Crie uma cópia idêntica de sua EC2 e inicie essa segunda EC2. Após isso, crie um balanceador, configure ambas EC2 nesse balancedor e garanta que, **mesmo com uma das EC2 desligada, o usuário final conseguirá acessar a página web.**
 
-Para a criação da segunda instância, foi copiado o código da primeira instância e alterado o nome do recurso:
+Para a criação da segunda instância, foi copiado o código da primeira instância e alterado o nome do recurso, e atualizada a stack com o comando _aws cloudformation update-stack_ (citado na questão anterior):
 
 ![ec2](imagens/ec2.jpeg)
 
+Depois da criação do ELB, foi realizado o teste de _failover_:
+
+Instância desligada:
+
+![failover](imagens/failover.jpeg)
+
+Teste de acesso:
+
+![elb](imagens/elb.jpeg)
 
 ## 6 - Segurança
 
