@@ -156,7 +156,7 @@ Resources:
         - !Ref WebServerSecurityGroup
       Tags:
        - Key: Name
-         Value: Formando DevOps - AWS Challenge EC2-1     
+         Value: Formando DevOps - AWS Challenge EC2
       UserData:
         Fn::Base64: !Sub |
             #!/bin/bash
