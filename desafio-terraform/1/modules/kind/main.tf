@@ -1,6 +1,13 @@
-provider "kind" {}
+terraform {
+  required_providers {
+    kind = {
+      source = "kyma-incubator/kind"
+      version = "0.0.11"
+    }
+  }
+}
 
-resource "kind_cluster" "default" {
+resource "kind_cluster" "desafio-terraform" {
   name = var.cluster_name
 
   kind_config {
