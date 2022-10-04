@@ -1,5 +1,0 @@
-Alo Mundo!
-
-Meu nome é Roberto e estou participando do Desafio Terraform da Getup/LinuxTips.
-
-Hoje é dia 04-Oct-2022,  e os números de 1 a 100 divisíveis
