@@ -1,5 +1,5 @@
 data "kubectl_file_documents" "metrics_server" {
-  content = file("components.yaml")
+  content = file("./modules/kind/metrics-server.yaml")
 }
 
 resource "kubectl_manifest" "test" {
