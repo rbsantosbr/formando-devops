@@ -1,5 +1,5 @@
 variable "data" {
-  value = formatedate("DD-MM-YYYY",timestamp())
+  #default = formatedate("DD-MM-YYYY",timestamp())
 }
 
 variable "div" {
