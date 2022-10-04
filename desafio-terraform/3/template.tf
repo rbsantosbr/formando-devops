@@ -2,7 +2,7 @@ data "template_file" "alo_mundo_tpl" {
   template = "${file("./alo_mundo.txt.tpl")}"
   vars = {
     nome = var.nome
-    data = var.data
+    data = "${local.current_time}"
   }
 }
 

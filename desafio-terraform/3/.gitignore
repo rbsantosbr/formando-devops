@@ -1,0 +1,14 @@
+# local .terraform dir
+.terraform/*
+
+# tf state files
+*.tfstate
+*.tfstate.*
+
+# tf variables files
+*.tfvars 
+
+infra-config
+test-cluster-config
+
+plano

@@ -1,6 +1,6 @@
-variable "data" {
-  #default = formatedate("DD-MM-YYYY",timestamp())
-}
+# variable "data" {
+#   #default = "${(locals.current_time.output)}"
+# }
 
 variable "div" {
   type = number
