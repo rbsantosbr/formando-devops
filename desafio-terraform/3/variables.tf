@@ -1,5 +1,5 @@
 variable "div" {
-  type = number
+  type    = number
   default = 15
 
   validation {
@@ -9,11 +9,11 @@ variable "div" {
 }
 
 variable "nome" {
-  type = string
+  type    = string
   default = "Roberto"
 }
 
-# variable "resultado" {
-#   type = list(number)
-#   default = "${local.dividendo}"
-# }
+variable "resultado" {
+  type = list(number)
+  default = [ 999 ]
+}
