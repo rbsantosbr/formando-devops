@@ -5,13 +5,13 @@ locals {
 
 }
 
-locals {
-  result = toset([
-    for i in range(0,100,1) : i%var.div == 0 ? i : " "
-  ])
+# locals {
+#   result = toset([
+#     for i in range(0,100,1) : i%var.div == 0 ? i : " "
+#   ])
+  
+# }
 
-}
-
-output "result" {
-  value = local.result
-}
+# output "result" {
+#   value = local.result
+# }
