@@ -71,12 +71,12 @@ Descreva abaixo como você construiria um `resource` terraform a partir de um re
 Para construção do recurso, utilizamos o <em><strong>terraform import</strong></em>, seguindo os seguintes passos:
 
 <ol>
-  <li>Criação do bloco do recurso à ser criado no root module</li>
+  <li>Criação do bloco do recurso à ser criado, no root module</li>
     <ol>
       <li><em>Ex.: resource "aws_instance" "teste"{}</em></li>
     </ol>
   <li>Indentificar o id do recurso que será importado;</li>
-  <li>Executar o comando <em>terraform import aws_instance.teste</em> <strong>id_instancia;</strong></li>
+  <li>Executar o comando <em>terraform import aws_instance.teste</em> <strong>id_recurso;</strong></li>
   <li>Executar o comando <em>terraform state pull > arquivo.tfstate </em> e recuperar os argumentos que são requeridos pelo bloco do terraform recém criado;</li>
   <li>Executar o commando <em>terraform plan para validar o recurso recém criado.</em></li>
 </ol> 
