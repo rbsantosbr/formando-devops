@@ -5,13 +5,17 @@ locals {
 
 }
 
-# locals {
-#   result = toset([
-#     for i in range(0,100,1) : i%var.div == 0 ? i : " "
-#   ])
-  
+# data "template_file" "alo_mundo_tpl" {
+#   template = file("./alo_mundo.txt.tpl")
+#   vars = {
+#     nome = var.nome
+#     data = "${local.current_time}"
+#     div  = var.div
+#   }
 # }
 
-# output "result" {
-#   value = local.result
-# }
+resource "local_file" "alo_mundo" {
+  #content  = data.template_file.alo_mundo_tpl.rendered
+  content = templatefile("./alo_mundo.txt.tpl", {nome = var.nome, data = "${local.current_time}", div = var.divisor})
+  filename = "./alo_mundo.txt"
+}

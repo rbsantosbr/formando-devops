@@ -1,9 +1,9 @@
-variable "div" {
+variable "divisor" {
   type    = number
   default = 15
 
   validation {
-    condition     = var.div != 0
+    condition     = var.divisor != 0
     error_message = "Não existe divisão por 0"
   }
 }
@@ -11,9 +11,4 @@ variable "div" {
 variable "nome" {
   type    = string
   default = "Roberto"
-}
-
-variable "resultado" {
-  type = list(number)
-  default = [ 999 ]
 }
