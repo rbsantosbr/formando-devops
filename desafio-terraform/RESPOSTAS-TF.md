@@ -9,24 +9,14 @@ Utilize a versão que desejar do terraform.
 
 ## 1. Módulos
 
-Escreva um módulo terraform para criar um cluster kind usando o provider `kyma-incubator/kind` com as seguintes características:
 
-- Node `infra` com label `role=infra` e taint `dedicated=infra:NoSchedule`;
-- Node `app` com label `role=app`;
-- Metrics Server instalado e reportando métricas de nodes e pods.
+Para solução dessa questão, além do provider `kyma-incubator/kind`, eu utilizei também, como referência, o módulo [PePoDev/cluster](https://registry.terraform.io/modules/PePoDev/cluster/kind/latest), para entender como os recursos eram aplicados no cluster;
 
-O módulo deve permitir, no mínimo, as seguintes variáveis:
+Não foi possível concluir a tarefa de renomear os nodes, pois não encontrei nenhuma referencia na documentação do kind, e no módulo `kyma-incubator/kind`, ele apenas considera se o nó será control-plane ou work;
 
-- cluster_name
-- kubernetes_version
+Então considerei em aplicar o label `role=infra` e taint `dedicated=infra:NoSchedule`, no control-plane e o label `role=app` no worker;
 
-O módulo deve retornar, no mínimo, os seguintes atributos:
-
-- api_endpoint
-- kubeconfig
-- client_certificate
-- client_key
-- cluster_ca_certificate
+Adicionei também, para fins de demonstração, o arquivo `terraform.tfvars` onde serão inseridas/modificadas as variáveis solicitadas no desafio.
 
 ## 2. Gerenciando recursos customizados
 
@@ -46,23 +36,12 @@ O módulo deve permitir, no mínimo, as seguintes variáveis:
 
 ## 3. Templates
 
-Escreva um código para criar automaticamente o arquivo `alo_mundo.txt` a partir do template `alo_mundo.txt.tpl` abaixo:
 
-```
-Alo Mundo!
+Criação do arquivo `alo_mundo.txt.tpl` à partir do conteúdo do desafio;
 
-Meu nome é ${nome} e estou participando do Desafio Terraform da Getup/LinuxTips.
+Para criação do arquivo **txt**, utilizei a função `templatefile`;
 
-Hoje é dia ${data} e os números de 1 a 100 divisíveis por ${div} são: ${...}
-
-```
-
-Nota:
-
-> A subtituição `${...}` deve ser gerada dinamicamente no formato `a, b, c, ...`
-> onde `a`, `b`, `c`, ... são os números cuja divisão por `div` é exata (resto 0).
->
-> Ex: Se `div = 15`, então o resultado em `${...}` será `15, 30, 45, 60, 75, 90`
+Para mostrar o resultado dos números divisíveis, utilizei a função `jsonencode` no template do arquivo, pois a utilização do bloco `locals` estava retornando erro ao atribuir uma lista a uma variável (string).
 
 ## 4. Assumindo recursos
 
@@ -71,9 +50,9 @@ Descreva abaixo como você construiria um `resource` terraform a partir de um re
 Para construção do recurso, utilizamos o <em><strong>terraform import</strong></em>, seguindo os seguintes passos:
 
 <ol>
-  <li>Criação do bloco do recurso à ser criado, no root module</li>
+  <li>Criação do bloco do recurso à ser criado, no root module;</li>
     <ol>
-      <li><em>Ex.: resource "aws_instance" "teste"{}</em></li>
+      <li><em>Ex.: resource "aws_instance" "teste"{};</em></li>
     </ol>
   <li>Indentificar o id do recurso que será importado;</li>
   <li>Executar o comando <em>terraform import aws_instance.teste</em> <strong>id_recurso;</strong></li>
