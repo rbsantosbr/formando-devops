@@ -1,2 +1,2 @@
-divisor = "10"
+divisor = "13"
 nome = "Barry"

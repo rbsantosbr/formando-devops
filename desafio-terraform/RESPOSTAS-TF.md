@@ -41,7 +41,7 @@ Criação do arquivo `alo_mundo.txt.tpl` à partir do conteúdo do desafio;
 
 Para criação do arquivo **txt**, utilizei a função `templatefile`;
 
-Para mostrar o resultado dos números divisíveis, utilizei a função `jsonencode` no template do arquivo, pois a utilização do bloco `locals` estava retornando erro ao atribuir uma lista a uma variável (string). Também não consegui formatar a saída para suprimir valores nulos e o argumento `result`.
+Para mostrar o resultado dos números divisíveis, utilizei `directive` no template do arquivo, pois a utilização do bloco `locals` estava retornando erro ao atribuir uma lista a uma variável (string).
 
 ## 4. Assumindo recursos
 
