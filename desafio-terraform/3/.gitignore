@@ -6,7 +6,9 @@
 *.tfstate.*
 
 # tf variables files
-#*.tfvars 
+#*.tfvars
+
+*.lock.hcl
 
 infra-config
 test-cluster-config
