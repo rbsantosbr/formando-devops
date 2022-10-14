@@ -1,0 +1,8 @@
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+
+helm repo update
+
+helm show values ingress-nginx/ingress-nginx
+
+helm install [RELEASE_NAME] ingress-nginx/ingress-nginx
+
