@@ -3,3 +3,6 @@ k create ns cabeludo
 k create deploy cabelo --image nginx:latest
 
 k create secret generic acesso --from-literal=username=pavao --from-literal=password=asabranca
+
+USUARIO=$(k get secret acesso -o jsonpath="{.data.username}" | base64 --decode; echo)
+SENHA=$(k get secret acesso -o jsonpath="{.data.password}" | base64 --decode; echo)
