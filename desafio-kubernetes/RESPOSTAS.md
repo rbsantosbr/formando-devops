@@ -1,0 +1,1 @@
+k logs serverweb -n meusite ou k logs -n meusite --selector=app=ovo

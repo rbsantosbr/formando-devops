@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: meuspread
+  name: meuspread
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: meuspread
+  template:
+    metadata:
+      labels:
+        app: meuspread
+    spec:
+      containers:
+      - image: nginx:latest
+        name: nginx
+        resources: {}
+status: {}
