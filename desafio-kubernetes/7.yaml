@@ -1,0 +1,9 @@
+k create deploy pombo --image nginx:1.11.9-alpine --replicas 4
+
+k set image deploy pombo nginx=nginx:1.16 --record
+
+k set image deploy pombo nginx=nginx:1.19 --record
+
+k rollout history deploy pombo
+
+k rollout undo deploy pombo --to-revision=1

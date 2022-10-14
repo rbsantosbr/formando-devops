@@ -1,0 +1,1 @@
+kubectl set image deploy meuweb nginx=nginx1.19

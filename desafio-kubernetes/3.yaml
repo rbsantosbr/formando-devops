@@ -23,6 +23,7 @@ spec:
         resources: {}
       initContainers:
       - image: alpine
+        name: alpine
         command: ["sh","-c","echo HelloGetup >> /app/index.html"]
         volumeMounts:
         - mountPath: /app

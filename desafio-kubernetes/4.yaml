@@ -1,24 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  creationTimestamp: null
   labels:
-    app: meuspread
-  name: meuspread
+    app: meuweb
+  name: meuweb
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: meuspread
+      app: meuweb
+  strategy: {}
   template:
     metadata:
+      creationTimestamp: null
       labels:
-        app: meuspread
+        app: meuweb
     spec:
       containers:
-      - image: nginx:latest
+      - image: nginx:1.16
         name: nginx
         resources: {}
-      tolerations:
-        key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
 status: {}
+
+### AVALIAR O NODE AFFINITY
