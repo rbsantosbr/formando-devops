@@ -1,0 +1,5 @@
+k create ns cabeludo
+
+k create deploy cabelo --image nginx:latest
+
+k create secret generic acesso --from-literal=username=pavao --from-literal=password=asabranca
