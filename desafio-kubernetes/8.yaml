@@ -20,6 +20,8 @@ spec:
       containers:
       - image: redis
         name: redis
+        ports:
+        - containerPort: 6379
         resources: {}
 status: {}
 

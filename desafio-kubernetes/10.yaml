@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: backend
+spec: {}
+status: {}
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    backend: balaclava
+    minhachave: semvalor
+  name: balaclava
+  namespace: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      backend: balaclava
+      minhachave: semvalor
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        backend: balaclava
+        minhachave: semvalor
+    spec:
+      containers:
+      - image: redis
+        name: redis
+        ports:
+        - containerPort: 6379
+        resources: {}
+status: {}
