@@ -21,6 +21,14 @@ spec:
       - image: nginx:1.16
         name: nginx
         resources: {}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: "node-role.kubernetes.io/control-plane"
+                operator: "Exists"
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
 status: {}
-
-### AVALIAR O NODE AFFINITY
