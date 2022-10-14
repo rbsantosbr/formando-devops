@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: meu-webserver
+  name: meu-webserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: meu-webserver
+  template:
+    metadata:
+      labels:
+        app: meu-webserver
+    spec:
+      containers:
+      - image: nginx:latest
+        name: nginx
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: nginx-vol 
+        resources: {}
+      initContainers:
+      - image: alpine
+        command: ["sh","-c","echo HelloGetup >> /app/index.html"]
+        volumeMounts:
+        - mountPath: /app
+          name: nginx-vol
+      volumes:
+      - name: nginx-vol
+        emptyDir: {}
+status: {}
