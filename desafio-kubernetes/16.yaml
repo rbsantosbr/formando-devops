@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    chaves: secretas
+  name: meudeploy-2
+  namespace: segredosdesucesso
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      chaves: secretas
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        chaves: secretas
+    spec:
+      containers:
+      - image: nginx:1.16
+        name: nginx
+        ports:
+        - containerPort: 80
+        envFrom:
+        - secretRef:
+            name: meusegredo
+        resources: {}
+status: {}

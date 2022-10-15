@@ -17,6 +17,8 @@ spec:
       containers:
       - image: nginx:latest
         name: nginx
+        ports:
+        - containerPort: 80
         volumeMounts:
         - mountPath: /usr/share/nginx/html
           name: nginx-vol 

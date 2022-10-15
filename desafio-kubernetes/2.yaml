@@ -17,6 +17,8 @@ spec:
       containers:
       - image: nginx:latest
         name: nginx
+        ports:
+        - containerPort: 80
         resources: {}
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"

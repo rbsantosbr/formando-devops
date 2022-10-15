@@ -1,7 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  creationTimestamp: null
   labels:
     app: meuweb
   name: meuweb
@@ -13,13 +12,14 @@ spec:
   strategy: {}
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: meuweb
     spec:
       containers:
       - image: nginx:1.16
         name: nginx
+        ports:
+        - containerPort: 80
         resources: {}
       affinity:
         nodeAffinity:

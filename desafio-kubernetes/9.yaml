@@ -31,6 +31,8 @@ spec:
       containers:
       - image: nginx
         name: nginx
+        ports:
+        - containerPort: 80
         volumeMounts:
         - mountPath: /data
           name: vol-data

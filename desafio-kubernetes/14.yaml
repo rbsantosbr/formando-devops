@@ -1,19 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  creationTimestamp: null
   labels:
-    app: depconfigs
-  name: depconfigs
-  namespace: site
+    app: meudeploy
+  name: meudeploy
+  namespace: segredosdesucesso
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: depsconfigs
+      app: meudeploy
+  strategy: {}
   template:
     metadata:
+      creationTimestamp: null
       labels:
-        app: depsconfigs
+        app: meudeploy
     spec:
       containers:
       - image: nginx:latest
@@ -21,11 +24,11 @@ spec:
         ports:
         - containerPort: 80
         volumeMounts:
-        - mountPath: /usr/share/nginx/html
-          name: configmap-vol 
+        - mountPath: /app
+          name: app-secret-vol
         resources: {}
       volumes:
-      - name: configmap-vol
-        configMap:
-          name: configsite
+      - name: app-secret-vol
+        secret:
+          secretName: meusegredo
 status: {}
