@@ -1,0 +1,1 @@
+kubectl autoscale deploy site -n frontend --cpu-percent=90 --min=2 --max=5
