@@ -1,0 +1,1 @@
+Criando um pod estático, static-pod.yaml e salvando o arquivo em /etc/kubernetes/manifests (default), ou no diretorio especificado na diretiva staticPodPath nas configuracoes do kubelet 
