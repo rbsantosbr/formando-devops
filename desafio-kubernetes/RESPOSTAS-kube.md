@@ -167,45 +167,10 @@ spec:
       - name: nginx-vol
         emptyDir: {}
 status: {}
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  labels:
-    app: meuweb
-  name: meuweb
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: meuweb
-  strategy: {}
-  template:
-    metadata:
-      labels:
-        app: meuweb
-    spec:
-      containers:
-      - image: nginx:1.16
-        name: nginx
-        ports:
-        - containerPort: 80
-        resources: {}
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: "node-role.kubernetes.io/control-plane"
-                operator: "Exists"
-                effect: NoSchedule
-      tolerations:
-      - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: NoSchedule
-status: {}
 ```
+
 4 - crie um deploy chamado `meuweb` com a imagem `nginx:1.16` que seja executado exclusivamente no node master.
+
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
