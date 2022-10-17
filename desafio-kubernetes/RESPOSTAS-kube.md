@@ -771,14 +771,19 @@ Para validar o acesso, foi utilizado o comando <em><strong>kubectl auth can-i li
 
 26 - criar a key e certificado cliente para uma usuaria chamada `jane` e que tenha permissao somente de listar pods no namespace `frontend`. liste os comandos utilizados.
 
+Geração da chave e certificado:
+
 ```
 openssl genrsa -out jane.key 2048
 
 openssl req -new -key jane.key -subj "/CN=jane" -out jane.csr
-
-cat jane.csr | base64 | tr -d "\n"
 ```
+
+Gerar o CertificateSigningRequest do usuário Jane:
+
 ```bash
+cat jane.csr | base64 | tr -d "\n"
+
 cat <<EOF | kubectl apply -f -
 apiVersion: certificates.k8s.io/v1
 kind: CertificateSigningRequest
@@ -792,16 +797,37 @@ spec:
   request: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0KTUlJQ1ZEQ0NBVHdDQVFBd0R6RU5NQXNHQTFVRUF3d0VhbUZ1WlRDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRApnZ0VQQURDQ0FRb0NnZ0VCQUxrWm8vNG1hZWc1UEl1ektod2NHWDh1aEhRV1lMeCtzS1hmaUpjeWhUbFhuclBPCnMxREUwUnkyQVY5cGkvelRWdkxOTFVVK3pkMmhvQTQ2RHMvOFdDL0g0RTkwQ0R2TDZ3OVhzdi9nRFVxaTNmRnUKUlN1VEFBU01ndE5qK0VxeUhHd3JKQ3FMT3p0QXdyY291QmlQTU9XcXpZTUhOMkwrV3R5YUlCdnBtVjYvMjNUOApmVW14akVhcm9qRG9kbjJBTitDWmFaZUpNVlJyVHF1YVVFUXY1Vk5jMWk2N2NocklidGtMdnZEY2N1TGhpUGlqCi8xVnhjcG5adFV2UEJzRHY0WG5iNHJvT29pMlFVMWJsaXZpS0hncEJEZnViQk1nRmlQQko1ZHdmSkFtMmhKRzgKd2x2L3ZxZDF6clpObUdPWHR2cTVtdnJIakRTZXZTb0ZUZ05nVktFQ0F3RUFBYUFBTUEwR0NTcUdTSWIzRFFFQgpDd1VBQTRJQkFRQVNUMWVQQ0krSVJEVHdFdzhaY1dkRjYrN2dmUWU3b29IWDJESk5qNm9XNllKNFA3c21iTmx5Ci80NklGOTh6ckZXc0tldjVzd0dUSzJ4YjM3S2Y3eHRWY2VwWisrTDNlelFLZVVWUGliZVRnWkUvWUpMWk9Hc0oKZ2tiWDZsSmQxazZkcU9zWm1DcEEzdDZOTDVtaTlyK3BZMjdxZ2hVMzJWa1BOSE1hWXNxdzdvcnhmaTVXa0FtNQp4VGh3bWFCVzQyRFJxYm9Qd2FQTGFOZzQ0cGZtQzdDdWNTNnF2WjJZMEhvOVh3YWZxZWFwMXcyWXhHbUlLckMrCmw3OFBGcUxRS2dZZldLejlQRHBQZW12YmJvanhFZlMyRWJJRTFFcjY5VXFhVDVQNVZMa1FtdlRSS1FoanFiREgKNG11dzZMekVYazJ2OHNtNEZRT2VCQ3QrZ3FkVkZtMHkKLS0tLS1FTkQgQ0VSVElGSUNBVEUgUkVRVUVTVC0tLS0tCg==
 EOF
 ```
+
+Verificar certificados pendentes:
+
+```bash
+k get csr
 ```
-kubectl certificate approve jane
 
+Aprovar a solicitação:
+
+```bash
+k certificate approve jane
+```
+Criar a Role para listar os pods:
+
+```bash
 k create role jane-role --resource=pods --verb=list
+```
+Criar o RoleBinding para vincular a Role jane-role com o usuário jane:
 
+```bash
 k create rolebinding jane-role-binding -n frontend --user=jane --role=jane-role
+```
+Adicionar as credenciais ao cluster:
 
-kubectl config set-credentials myuser --client-key=myuser.key --client-certificate=myuser.crt --embed-certs=true
+```bash
+k config set-credentials myuser --client-key=myuser.key --client-certificate=myuser.crt --embed-certs=true
+```
+Adicionar o contexto:
 
-kubectl config set-context myuser --cluster=kubernetes --user=myuser
+```bash
+k config set-context myuser --cluster=kubernetes --user=myuser
 ```
 
 27 - qual o `kubectl get` que traz o status do scheduler, controller-manager e etcd ao mesmo tempo
