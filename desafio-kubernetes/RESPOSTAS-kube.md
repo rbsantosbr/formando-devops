@@ -336,22 +336,18 @@ status: {}
 ---
 
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  creationTimestamp: null
-  labels:
-    app: meusiteset
   name: meusiteset
   namespace: backend
 spec:
-  replicas: 3
   selector:
     matchLabels:
       app: meusiteset
-  strategy: {}
+  serviceName: "meusiteset"
+  replicas: 3
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: meusiteset
     spec:
@@ -360,16 +356,93 @@ spec:
         name: nginx
         ports:
         - containerPort: 80
+          name: web
         volumeMounts:
         - mountPath: /data
-          name: vol-data
+          name: data
         resources: {}
       volumes:
-      - name: vol-data
+      - name: data
         persistentVolumeClaim:
-          claimName: pvc-data        
-status: {}
+          claimName: pvc-data
+  # volumeClaimTemplates:
+  # - metadata:
+  #     name: data
+  #     namespace: backend
+  #   spec:
+  #     accessModes: [ "ReadWriteMany" ]
+  #     storageClassName: "portworx-io-priority-high"
+  #     resources:
+  #       requests:
+  #         storage: 1Gi        
 
+---
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: portworx-io-priority-high
+  namespace: backend
+provisioner: kubernetes.io/portworx-volume
+parameters:
+  repl: "1"
+  snap_interval:   "70"
+  priority_io:  "high"
+
+# apiVersion: storage.k8s.io/v1
+# kind: StorageClass
+# metadata:
+#   name: local-storage
+# provisioner: kubernetes.io/no-provisioner
+# volumeBindingMode: WaitForFirstConsumer
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-data
+  namespace: backend
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: /data
+  storageClassName: portworx-io-priority-high
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-data
+  namespace: backend
+spec:
+  accessModes:
+  - ReadWriteMany
+  storageClassName: portworx-io-priority-high
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: meusiteset
+  namespace: backend
+  labels:
+    app: meusiteset
+spec:
+  ports:
+  - port: 80
+    name: web
+  clusterIP: None
+  selector:
+    app: meusiteset
 ---
 
 apiVersion: storage.k8s.io/v1
