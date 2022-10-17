@@ -105,7 +105,7 @@ spec:
 status: {}
 ```
 
-Poderíamos também utilizar o recurso Daemonset para recursos de monitoramento ou logs em cada nó:
+Poderíamos também utilizar o recurso Daemonset, amplamente utilizado em recursos de network, monitoramento e logs no cluster:
 
 ```yaml
 apiVersion: apps/v1
