@@ -691,9 +691,9 @@ k drain k8s-worker1 --ignore-daemonsets
 
 24 - qual a maneira de garantir a criaçao de um pod ( sem usar o kubectl ou api do k8s ) em um nó especifico.
 
-```
+
 Criando um pod estático, com o manifesto static-<POD_NAME>.yaml e salvando o arquivo em /etc/kubernetes/manifests (default), ou no diretório especificado na diretiva **staticPodPath** nas configurações do kubelet.
-```
+
 
 25 - criar uma serviceaccount `userx` no namespace `developer`. essa serviceaccount só pode ter permissao total sobre pods (inclusive logs) e deployments no namespace `developer`. descreva o processo para validar o acesso ao namespace do jeito que achar melhor.
 
@@ -765,6 +765,7 @@ subjects:
   name: userx
   namespace: developer
 ```
+Para validar o acesso, foi utilizado o comando <em><strong>kubectl auth can-i list deploy --as=system:serviceaccount:developer:userx</strong></em>
 
 26 - criar a key e certificado cliente para uma usuaria chamada `jane` e que tenha permissao somente de listar pods no namespace `frontend`. liste os comandos utilizados.
 
