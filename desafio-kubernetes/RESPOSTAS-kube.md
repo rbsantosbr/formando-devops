@@ -805,5 +805,5 @@ kubectl config set-context myuser --cluster=kubernetes --user=myuser
 27 - qual o `kubectl get` que traz o status do scheduler, controller-manager e etcd ao mesmo tempo
 
 ```bash
-k get po -n kube-system ou k get po -A
+k get po -n kube-system
 ```
