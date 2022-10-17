@@ -66,7 +66,7 @@ EOF
 
 ## Bora começar !!!
 
-## Para responder as questões utilizei o 'alias k=kubectl', bom como as abreviações dos recursos do kubernetes
+### Para responder as questões utilizei o 'alias k=kubectl', bem como as abreviações dos recursos do kubernetes
 
 1 - com uma unica linha de comando capture somente linhas que contenham "erro" do log do pod `serverweb` no namespace `meusite` que tenha a label `app: ovo`.
 
