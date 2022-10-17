@@ -1,1 +1,1 @@
-k drain <NODENAME> --ignore-daemonsets
+k drain k8s-worker1 --ignore-daemonsets

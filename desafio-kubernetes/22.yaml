@@ -1,1 +1,1 @@
-k cordon <NODENAME>
+k cordon k8s-worker1
