@@ -1,1 +1,0 @@
-k create ns site && k create configmap configsite -n site --from-literal=index.html=Roberto

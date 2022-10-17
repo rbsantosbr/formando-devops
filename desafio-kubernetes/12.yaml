@@ -1,3 +1,0 @@
-k create secret generic meusegredo -n segredosdesucesso --from-literal=segredo=azul --from-file=chave-secreta
-
-Nesta questão fiquei em duvida quanto ao conteúdo

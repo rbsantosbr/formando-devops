@@ -1,1 +1,0 @@
-k get secret piadas -n meussegredos -o jsonpath="{.data.segredos}" | base64 --decode; echo

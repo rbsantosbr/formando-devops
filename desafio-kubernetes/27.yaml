@@ -1,1 +1,0 @@
-k get po -n kube-system ou k get po -A

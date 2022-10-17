@@ -1,1 +1,0 @@
-k drain k8s-worker1 --ignore-daemonsets
