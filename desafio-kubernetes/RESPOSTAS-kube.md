@@ -234,7 +234,7 @@ helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 
 helm repo update
 
-helm install my-ingress-nginx ingress-nginx/ingress-nginx --version 4.3.0 --set \ controller.hostPort.enabled=true,controller.service.type=NodePort,controller.updateStrategy.type=Recreate
+helm install my-ingress-nginx ingress-nginx/ingress-nginx --version 4.3.0 --set controller.hostPort.enabled=true,controller.service.type=NodePort,controller.updateStrategy.type=Recreate
 ```
 
 7 - quais as linhas de comando para: 
