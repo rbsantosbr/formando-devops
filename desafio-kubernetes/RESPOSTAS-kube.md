@@ -71,7 +71,7 @@ EOF
 1 - com uma unica linha de comando capture somente linhas que contenham "erro" do log do pod `serverweb` no namespace `meusite` que tenha a label `app: ovo`.
 
 ```
-k logs serverweb -n meusite ou k logs -n meusite --selector=app=ovo
+
 ```
 2 - crie o manifesto de um recurso que seja executado em todos os nós do cluster com a imagem `nginx:latest` com nome `meu-spread`, nao sobreponha ou remova qualquer taint de qualquer um dos nós.
 
