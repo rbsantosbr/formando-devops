@@ -401,46 +401,6 @@ parameters:
   repl: "1"
   snap_interval:   "70"
   priority_io:  "high"
-
-# apiVersion: storage.k8s.io/v1
-# kind: StorageClass
-# metadata:
-#   name: local-storage
-# provisioner: kubernetes.io/no-provisioner
-# volumeBindingMode: WaitForFirstConsumer
-
-# ---
-
-# apiVersion: v1
-# kind: PersistentVolume
-# metadata:
-#   name: pv-data
-#   namespace: backend
-# spec:
-#   accessModes:
-#   - ReadWriteMany
-#   capacity:
-#     storage: 1Gi
-#   hostPath:
-#     path: /data
-#   storageClassName: portworx-io-priority-high
-
-# ---
-
-# apiVersion: v1
-# kind: PersistentVolumeClaim
-# metadata:
-#   name: pvc-data
-#   namespace: backend
-# spec:
-#   accessModes:
-#   - ReadWriteMany
-#   storageClassName: portworx-io-priority-high
-#   resources:
-#     requests:
-#       storage: 1Gi
-
-
 ```
 
 10 - crie um recurso com 2 replicas, chamado `balaclava` com a imagem `redis`, usando as labels nos pods, replicaset e deployment, `backend=balaclava` e `minhachave=semvalor` no namespace `backend`.
