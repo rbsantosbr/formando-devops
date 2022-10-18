@@ -71,7 +71,7 @@ EOF
 1 - com uma unica linha de comando capture somente linhas que contenham "erro" do log do pod `serverweb` no namespace `meusite` que tenha a label `app: ovo`.
 
 ```
-
+k logs --all-containers -n meusite -l app=ovo | grep -iE 'error'
 ```
 2 - crie o manifesto de um recurso que seja executado em todos os nós do cluster com a imagem `nginx:latest` com nome `meu-spread`, nao sobreponha ou remova qualquer taint de qualquer um dos nós.
 
@@ -335,6 +335,23 @@ status: {}
 
 ---
 
+apiVersion: v1
+kind: Service
+metadata:
+  name: meusiteset
+  namespace: backend
+  labels:
+    app: meusiteset
+spec:
+  ports:
+  - port: 80
+    name: web
+  clusterIP: None
+  selector:
+    app: meusiteset
+
+---
+
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -361,20 +378,20 @@ spec:
         - mountPath: /data
           name: data
         resources: {}
-      volumes:
-      - name: data
-        persistentVolumeClaim:
-          claimName: pvc-data
-  # volumeClaimTemplates:
-  # - metadata:
-  #     name: data
-  #     namespace: backend
-  #   spec:
-  #     accessModes: [ "ReadWriteMany" ]
-  #     storageClassName: "portworx-io-priority-high"
-  #     resources:
-  #       requests:
-  #         storage: 1Gi        
+      # volumes:
+      # - name: data
+      #   persistentVolumeClaim:
+      #     claimName: pvc-data
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+      namespace: backend
+    spec:
+      accessModes: [ "ReadWriteMany" ]
+      storageClassName: "portworx-io-priority-high"
+      resources:
+        requests:
+          storage: 1Gi        
 
 ---
 
@@ -396,53 +413,38 @@ parameters:
 # provisioner: kubernetes.io/no-provisioner
 # volumeBindingMode: WaitForFirstConsumer
 
----
+# ---
 
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: pv-data
-  namespace: backend
-spec:
-  accessModes:
-  - ReadWriteMany
-  capacity:
-    storage: 1Gi
-  hostPath:
-    path: /data
-  storageClassName: portworx-io-priority-high
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: pv-data
+#   namespace: backend
+# spec:
+#   accessModes:
+#   - ReadWriteMany
+#   capacity:
+#     storage: 1Gi
+#   hostPath:
+#     path: /data
+#   storageClassName: portworx-io-priority-high
 
----
+# ---
 
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: pvc-data
-  namespace: backend
-spec:
-  accessModes:
-  - ReadWriteMany
-  storageClassName: portworx-io-priority-high
-  resources:
-    requests:
-      storage: 1Gi
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: pvc-data
+#   namespace: backend
+# spec:
+#   accessModes:
+#   - ReadWriteMany
+#   storageClassName: portworx-io-priority-high
+#   resources:
+#     requests:
+#       storage: 1Gi
 
----
 
-apiVersion: v1
-kind: Service
-metadata:
-  name: meusiteset
-  namespace: backend
-  labels:
-    app: meusiteset
-spec:
-  ports:
-  - port: 80
-    name: web
-  clusterIP: None
-  selector:
-    app: meusiteset
 ```
 
 10 - crie um recurso com 2 replicas, chamado `balaclava` com a imagem `redis`, usando as labels nos pods, replicaset e deployment, `backend=balaclava` e `minhachave=semvalor` no namespace `backend`.
