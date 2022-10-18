@@ -32,7 +32,7 @@ docker run -it --rm --name desafio-docker-4 -v $PWD/templates/python:/usr/src/ap
 
 5. Execute um container da imagem `nginx` com limite de memória 128MB e 1/2 CPU.
 ```bash
-docker container --name desafio-docker-5 run -d -m 128M --cpus 0.5 nginx
+docker container run --name desafio-docker-5 run -d -m 128M --cpus 0.5 nginx
 ```
 
 6. Qual o comando usado para limpar recursos como imagens, containers parados, cache de build e networks não utilizadas?
