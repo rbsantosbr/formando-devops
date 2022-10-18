@@ -378,10 +378,6 @@ spec:
         - mountPath: /data
           name: data
         resources: {}
-      # volumes:
-      # - name: data
-      #   persistentVolumeClaim:
-      #     claimName: pvc-data
   volumeClaimTemplates:
   - metadata:
       name: data
@@ -506,7 +502,7 @@ k get svc -o json | jq -r '.items[] | select(.spec.type == "LoadBalancer") | .me
      aW54LGFwcC5rdWJlcm5ldGVzLmlvL25hbWU9aW5ncmVzcy1uZ
 ```
 ```bash
-k create secret generic meusegredo -n segredosdesucesso --from-literal=segredo=azul --from-file=chave-secreta
+k create secret generic meusegredo -n segredosdesucesso --from-literal=segredo=azul --from-file=./templates/kube/chave-secreta
 ```
 
 13 - qual a linha de comando para criar um configmap chamado `configsite` no namespace `site`. Deve conter uma entrada `index.html` que contenha seu nome.

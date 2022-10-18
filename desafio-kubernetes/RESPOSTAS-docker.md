@@ -13,7 +13,7 @@ docker container run --name desafio-docker-2 -d -p 8080:80 nginx:1.22
    Considerando que na imagem oficial do nginx as opções de servidor estão no arquivo default.conf, alterei este arquivo para receber o valor do listen através da **env** NGINX_PORT 
 
 ```bash
-docker run --name desafio-docker-3 -e NGINX_PORT=90 -p 8080:90 -v $PWD/default.conf:/etc/nginx/conf.d/default.conf:ro -d nginx:1.22
+docker run --name desafio-docker-3 -e NGINX_PORT=90 -p 8080:90 -v $PWD/templates/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro -d nginx:1.22
 ```
 4. Construa uma imagem para executar o programa abaixo:
 
@@ -24,8 +24,10 @@ def main():
 if __name__ == '__main__':
   main()
 ``` 
+Geração do arquivo **hello-world.py** com o conteúdo do template, salvo em _templates/python_
+
 ```bash
-docker run -it --rm --name desafio-docker-4 -v "$PWD":/usr/src/app -w /usr/src/app python:3 python hello-world.py
+docker run -it --rm --name desafio-docker-4 -v $PWD/templates/python:/usr/src/app -w /usr/src/app python:3 python hello-world.py
 ```
 
 5. Execute um container da imagem `nginx` com limite de memória 128MB e 1/2 CPU.
