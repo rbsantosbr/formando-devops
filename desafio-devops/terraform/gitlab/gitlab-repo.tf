@@ -29,7 +29,7 @@ resource "gitlab_repository_file" "readme" {
 resource "gitlab_group" "formandoDevOps" {
   name = "desafio-devops"
   path = "desafio-devops"
-  description = "Teste de criação de um grupo"
+  description = "Repositórios do desafio-devops"
   parent_id = var.gitlab_root_group
   visibility_level = "public"
 }
