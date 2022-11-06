@@ -29,9 +29,12 @@ resource "kind_cluster" "desafio-devops" {
 
   }
   provisioner "local-exec" {
-    command = "kubectl taint node k8s-cluster-control-plane dedicated=infra:NoSchedule"
-  }
-  provisioner "local-exec" {
-    command = "kubectl create ns argocd"
+    command = <<EOT
+      kubectl taint node k8s-cluster-control-plane dedicated=infra:NoSchedule
+      kubectl create ns argocd
+      kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+      sleep 60
+      kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 --decode && echo
+    EOT
   }
 }
