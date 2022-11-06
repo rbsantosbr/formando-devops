@@ -33,7 +33,17 @@ resource "kind_cluster" "desafio-devops" {
       kubectl taint node k8s-cluster-control-plane dedicated=infra:NoSchedule
       kubectl create ns argocd
       kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-      kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml --kubelet-insecure-tls
+      kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
     EOT
   }
+}
+
+resource "time_sleep" "wait_cluster" {
+  create_duration = "10s"
+  depends_on      = [kind_cluster.desafio-devops]
+}
+
+data "local_file" "kube_config" {
+  filename   = "k8s-cluster-config"
+  depends_on = [time_sleep.wait_cluster]
 }
