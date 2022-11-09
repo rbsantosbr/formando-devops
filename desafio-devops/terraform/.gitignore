@@ -1,5 +1,6 @@
 # local .terraform dir
 .terraform/*
+<<<<<<< HEAD
 .terraform*
 
 # tf state files
@@ -12,4 +13,3 @@
 #others
 plano
 *.lock.hcl
-
