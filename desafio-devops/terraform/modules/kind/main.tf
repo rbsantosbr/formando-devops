@@ -1,6 +1,7 @@
 resource "kind_cluster" "desafio-devops" {
-    name           = "k8s-cluster"
-    wait_for_ready = true
+  name = var.cluster_name
+  node_image = "kindest/node:v${var.kubernetes_version}"
+  wait_for_ready = true
 
   kind_config {
       kind        = "Cluster"
@@ -30,7 +31,7 @@ resource "kind_cluster" "desafio-devops" {
   }
   provisioner "local-exec" {
     command = <<EOT
-      kubectl taint node k8s-cluster-control-plane dedicated=infra:NoSchedule
+      kubectl taint node ${var.cluster_name}-control-plane dedicated=infra:NoSchedule
       kubectl create ns argocd
       kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.4.16/manifests/install.yaml
       kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
@@ -46,6 +47,6 @@ resource "time_sleep" "wait_cluster" {
 }
 
 data "local_file" "kube_config" {
-  filename   = "k8s-cluster-config"
+  filename   = "${var.cluster_name}-config"
   depends_on = [time_sleep.wait_cluster]
 }

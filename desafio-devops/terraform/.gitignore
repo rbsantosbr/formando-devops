@@ -1,5 +1,15 @@
-terraform.tfvars
-k8s-cluster-config
+# local .terraform dir
 .terraform/*
-terraform.tfstate*
 .terraform*
+
+# tf state files
+*.tfstate
+*.tfstate.*
+
+# tf variables files
+*.tfvars 
+
+#others
+plano
+*.lock.hcl
+

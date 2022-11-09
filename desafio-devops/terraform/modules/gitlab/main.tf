@@ -1,16 +1,6 @@
-provider "gitlab" {
-  token = var.gitlab_token
-}
-
-resource "gitlab_project" "desafio-devops-podinfo" {
-  name = "podinfo"
+resource "gitlab_project" "desafio-devops-projects" {
+  name = var.project_name
   description = "Repositorio para desafio final do programa Getup - Formando DevOps na Vida Real"
-  visibility_level = "public"
-}
-
-resource "gitlab_project" "desafio-devops-gitops" {
-  name = "gitops"
-  description = "Repositorio para implementação do GitOps com ArgoCD"
   visibility_level = "public"
 }
 
