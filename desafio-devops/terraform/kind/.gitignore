@@ -1,6 +1,0 @@
-terraform.tfvars
-k8s-cluster-config
-.terraform/*
-terraform.tfstate*
-.terraform*
-plano
