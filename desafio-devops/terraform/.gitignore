@@ -13,3 +13,4 @@
 plano
 *.lock.hcl
 k8s-cluster-config
+observabilidade/telegram-secret.yaml
