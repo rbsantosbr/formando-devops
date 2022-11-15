@@ -12,4 +12,4 @@
 #others
 plano
 *.lock.hcl
-terraform/k8s-cluster-config
+k8s-cluster-config
