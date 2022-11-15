@@ -5,7 +5,7 @@ metadata:
   namespace: monitoring
 spec:
   route:
-    group_by:
+    groupBy:
     - namespace
     continue: false
     routes:
@@ -13,10 +13,10 @@ spec:
       matchers:
       - alertname=~"InfoInhibitor|Watchdog"
       continue: false
-    group_wait: 30s
-    group_interval: 5m
-    repeat_interval: 12h
-  inhibit_rules:
+    groupWait: 30s
+    groupInterval: 5m
+    repeatInterval: 12h
+  inhibitRules:
   - source_matchers:
     - severity="critical"
     target_matchers:
