@@ -1,13 +1,42 @@
 apiVersion: monitoring.coreos.com/v1alpha1
 kind: AlertmanagerConfig
 metadata:
-  name: main-rules-alert-config
+  name: desafio-devops-alert-config
   namespace: monitoring
 spec:
   route:
-    repeatInterval: 30m
+    group_by:
+    - namespace
+    continue: false
     routes:
     - receiver: 'telegram'
+      matchers:
+      - alertname=~"InfoInhibitor|Watchdog"
+      continue: false
+    group_wait: 30s
+    group_interval: 5m
+    repeat_interval: 12h
+  inhibit_rules:
+  - source_matchers:
+    - severity="critical"
+    target_matchers:
+    - severity=~"warning|info"
+    equal:
+    - namespace
+    - alertname
+  - source_matchers:
+    - severity="warning"
+    target_matchers:
+    - severity="info"
+    equal:
+    - namespace
+    - alertname
+  - source_matchers:
+    - alertname="InfoInhibitor"
+    target_matchers:
+    - severity="info"
+    equal:
+    - namespace
   receivers:
   - name: 'telegram'
     telegramConfigs:
