@@ -7,30 +7,10 @@ spec:
   route:
     groupBy:
     - namespace
-    continue: false
-    routes:
-    - receiver: 'telegram'
-      matchers:
-      - alertname=~"InfoInhibitor|Watchdog"
-      continue: false
     groupWait: 30s
     groupInterval: 5m
-    repeatInterval: 12h
-  # inhibitRules:
-  # - sourceMatch: [severity: critical"]
-  #   targetMatch: [severity: ~"warning|info"]
-  #   equal:
-  #   - namespace
-  #   - alertname
-  # - sourceMatch: [severity=: "warning"]
-  #   targetMatch: [severity: "info"]
-  #   equal:
-  #   - namespace
-  #   - alertname
-  # - sourceMatch: [alertname: "InfoInhibitor"]
-  #   targetMatch: [severity: "info"]
-  #   equal:
-  #   - namespace
+    repeatInterval: 30m
+    receiver: 'telegram'
   receivers:
   - name: 'telegram'
     telegramConfigs:
