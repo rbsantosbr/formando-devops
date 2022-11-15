@@ -18,23 +18,23 @@ spec:
     repeatInterval: 12h
   inhibitRules:
   - sourceMatch:
-    - severity="critical"
+    - severity: "critical"
     targetMatch:
-    - severity=~"warning|info"
+    - severity: ~"warning|info"
     equal:
     - namespace
     - alertname
   - sourceMatch:
-    - severity="warning"
+    - severity: "warning"
     targetMatch:
-    - severity="info"
+    - severity: "info"
     equal:
     - namespace
     - alertname
   - sourceMatch:
-    - alertname="InfoInhibitor"
+    - alertname: "InfoInhibitor"
     targetMatch:
-    - severity="info"
+    - severity: "info"
     equal:
     - namespace
   receivers:
