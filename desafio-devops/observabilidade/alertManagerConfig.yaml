@@ -16,21 +16,21 @@ spec:
     groupWait: 30s
     groupInterval: 5m
     repeatInterval: 12h
-  inhibitRules:
-  - sourceMatch: [severity: critical"]
-    targetMatch: [severity: ~"warning|info"]
-    equal:
-    - namespace
-    - alertname
-  - sourceMatch: [severity=: "warning"]
-    targetMatch: [severity: "info"]
-    equal:
-    - namespace
-    - alertname
-  - sourceMatch: [alertname: "InfoInhibitor"]
-    targetMatch: [severity: "info"]
-    equal:
-    - namespace
+  # inhibitRules:
+  # - sourceMatch: [severity: critical"]
+  #   targetMatch: [severity: ~"warning|info"]
+  #   equal:
+  #   - namespace
+  #   - alertname
+  # - sourceMatch: [severity=: "warning"]
+  #   targetMatch: [severity: "info"]
+  #   equal:
+  #   - namespace
+  #   - alertname
+  # - sourceMatch: [alertname: "InfoInhibitor"]
+  #   targetMatch: [severity: "info"]
+  #   equal:
+  #   - namespace
   receivers:
   - name: 'telegram'
     telegramConfigs:
