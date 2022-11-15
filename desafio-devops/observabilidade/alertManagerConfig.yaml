@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: main-rules-alert-config
+  namespace: monitoring
+spec:
+  route:
+    repeatInterval: 30m
+    routes:
+    - receiver: 'telegram'
+
+receivers:
+  - name: 'telegram'
+    telegramConfigs:
+    - bot_token: ["5795317227:AAFKw1qG_nuxKbPop0RXZ2YAkGvgoAcWdSY"]
+      chat_id: [1001851075210]
