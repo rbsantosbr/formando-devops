@@ -11,7 +11,7 @@ spec:
   receivers:
   - name: 'telegram'
     telegramConfigs:
-    - bot_token: 
+    - botToken: 
         name: desafio-devops-bot-token
         key: token
-      chat_id: 1001851075210
+      chatID: 1001851075210
