@@ -9,8 +9,8 @@ spec:
     routes:
     - receiver: 'telegram'
 
-receivers:
-  - name: 'telegram'
-    telegramConfigs:
-    - bot_token: ["5795317227:AAFKw1qG_nuxKbPop0RXZ2YAkGvgoAcWdSY"]
-      chat_id: [1001851075210]
+  receivers:
+    - name: 'telegram'
+      telegramConfigs:
+      - bot_token: ["5795317227:AAFKw1qG_nuxKbPop0RXZ2YAkGvgoAcWdSY"]
+        chat_id: [1001851075210]
