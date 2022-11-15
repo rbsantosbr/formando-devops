@@ -33,8 +33,10 @@ resource "kind_cluster" "desafio-devops" {
     command = <<EOT
       kubectl taint node ${var.cluster_name}-control-plane dedicated=infra:NoSchedule
       kubectl create ns argocd
+      kubectl create ns monitoring
       kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.4.16/manifests/install.yaml
       kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+      helm install prometheus-stack prometheus-community/kube-prometheus-stack --version 41.7.4 --namespace monitoring
       sleep 60
       kubectl apply -f https://gitlab.com/rbsantosbr/gitops/-/raw/main/application.yaml
     EOT
