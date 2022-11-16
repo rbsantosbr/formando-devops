@@ -13,7 +13,7 @@ O arquivo de configuração do pipeline esta no repositorio [podinfo](/podinfo/.
 ### Evidências:
 
 #### Linter do Dokerfile
-![Linter](/imagens/linter.jpeg)
+![Linter](imagens/linter.jpeg)
 
 
 #### Scan com Trivy
