@@ -8,7 +8,7 @@
      -> falhar se houver bug crítico
 ```
 
-O arquivo de configuração do pipeline esta no repositorio [podinfo](/podinfo/.gitlab-ci.yml).
+O arquivo de configuração do pipeline esta no repositorio [podinfo](podinfo/.gitlab-ci.yml).
 
 ### Evidências:
 
@@ -31,7 +31,7 @@ O arquivo de configuração do pipeline esta no repositorio [podinfo](/podinfo/.
   -> [plus] criar repo no gitlab
 ```
 
-Os arquivos estão no diretório [Terraform](/terraform/)
+Os arquivos estão no diretório [Terraform](terraform/)
 
 ### Evidências:
 
