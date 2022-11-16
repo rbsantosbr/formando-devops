@@ -41,10 +41,10 @@ Os arquivos estão no diretório [Terraform](terraform/)
 #### Cluster Criado
 ![Cluster](imagens/cluster.jpeg)
 
-#### Plan do Repo
+#### Plan do Repo podinfo
 ![Repo](imagens/podinfo_tf_plan.jpeg)
 
-#### Repo Criado
+#### Repo podinfo Criado
 ![Podinfo](imagens/podinfo_repo.jpeg)
 
 
