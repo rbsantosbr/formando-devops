@@ -39,7 +39,7 @@ Os arquivos estão no diretório [Terraform](/terraform/)
 ![Kind](imagens/cluster_tf_plan.jpeg)
 
 #### Cluster Criado
-![Cluster](/imagens/cluster.jpeg)
+![Cluster](imagens/cluster.jpeg)
 
 #### Plan do Repo
 ![Repo](imagens/podinfo_tf_plan.jpeg)
@@ -64,10 +64,51 @@ Os arquivos estão no diretório [Terraform](/terraform/)
 ### Evidências:
 
 #### Liveness e Readiness
-![Probe](imagens/liveness-readnessProbe.jpeg)
+
+```yaml
+livenessProbe:
+          exec:
+            command:
+            - podcli
+            - check
+            - http
+            - localhost:9898/healthz
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 5
+        name: podinfo
+        ports:
+        - containerPort: 9898
+          name: http
+          protocol: TCP
+        - containerPort: 9797
+          name: http-metrics
+          protocol: TCP
+        - containerPort: 9999
+          name: grpc
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - podcli
+            - check
+            - http
+            - localhost:9898/readyz
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 5
+```
 
 #### Limits
-![Limits](imagens/limits.jpeg)
+```yaml
+resources:
+          requests:
+            cpu: 1m
+            memory: 16Mi
+          limits:
+            cpu: 10m
+            memory: 32Mi
+```
 
 Durante a configuração do cluster fiz o deploy do **ArgoCD** e outras features com o local-exec, e ja fiz a configuração do CD:
 
