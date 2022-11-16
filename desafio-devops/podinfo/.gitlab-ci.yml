@@ -1,0 +1,118 @@
+# include:
+#   - local: /templates/push_manifest_another_repo.yaml
+#   - remote: "https://github.com/aquasecurity/trivy/raw/main/contrib/Trivy.gitlab-ci.yml"
+
+stages:
+  - lint
+  - build
+  - scan
+  - template
+
+variables:
+  IMAGE: $CI_REGISTRY/$GITLAB_USER_LOGIN/$CI_PROJECT_NAME
+
+lint:dockerfile:
+  stage: lint
+  image: hadolint/hadolint:latest-debian
+  script:
+    - hadolint Dockerfile
+  tags:
+    - docker
+
+build:image:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+   needs: 
+    - job: lint:dockerfile
+  before_script:
+    - echo ${CI_ACCESS_TOKEN} | docker login --username ${CI_REGISTRY_LOGIN} --password-stdin ${CI_REGISTRY}  
+  
+  script:
+    - |
+      if [[ "$CI_COMMIT_BRANCH" != "$CI_DEFAULT_BRANCH" ]]; then
+        tag="latest"
+        echo "Running on default branch '$CI_DEFAULT_BRANCH': tag = 'latest'"
+        echo "IMAGE_ID=$IMAGE:$tag" >> build.env
+      else
+        tag="$CI_COMMIT_SHORT_SHA"
+        echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
+        echo "IMAGE_ID=$IMAGE:$tag" >> build.env
+      fi
+
+    - docker build --pull --file Dockerfile --build-arg REVISION=${REVISION} --tag "$IMAGE:$tag" .
+    - docker push "$IMAGE:$tag"
+  # Run this job in a branch where a Dockerfile exists
+  rules:
+    - if: $CI_COMMIT_BRANCH
+      exists:
+        - Dockerfile
+  tags:
+    - docker
+  artifacts:
+    reports:
+      dotenv: build.env
+    expire_in: 1 days
+  retry: 1
+
+build:manifest:
+  stage: template
+  image: alpine:3.16.2
+  before_script:
+    - export IMAGE_TAG="$IMAGE_ID"
+  script:
+    - apk add gettext
+    - mkdir -p artifacts
+    - envsubst < podinfo-template.yaml >> artifacts/deploy-podinfo.yaml
+  artifacts:
+    paths:
+      - artifacts/*.yaml
+    expire_in: 1 days
+  tags:
+    - docker-runner
+
+container:scanning:
+  stage: scan
+  needs:
+    - job: build:image
+  image:
+    name: docker.io/aquasec/trivy:latest
+    entrypoint: [""]
+  variables:
+    # No need to clone the repo, we exclusively work on artifacts.  See
+    # https://docs.gitlab.com/ee/ci/runners/README.html#git-strategy
+    GIT_STRATEGY: none
+    TRIVY_USERNAME: "$CI_REGISTRY_LOGIN"
+    TRIVY_PASSWORD: "$CI_ACCESS_TOKEN"
+    TRIVY_AUTH_URL: "$CI_REGISTRY"
+    FULL_IMAGE_NAME: $IMAGE_ID
+  script:
+    - trivy --version
+    # cache cleanup is needed when scanning images with the same tags, it does not remove the database
+    - time trivy image --clear-cache
+    # update vulnerabilities db
+    - time trivy image --download-db-only --no-progress --cache-dir .trivycache/
+    # Builds report and puts it in the default workdir $CI_PROJECT_DIR, so `artifacts:` can take it from there
+    - time trivy image --exit-code 0 --cache-dir .trivycache/ --no-progress --format template --template "@/contrib/gitlab.tpl"
+        --output "$CI_PROJECT_DIR/gl-container-scanning-report.json" "$FULL_IMAGE_NAME"
+    # Prints full report
+    - time trivy image --exit-code 0 --cache-dir .trivycache/ --no-progress "$FULL_IMAGE_NAME"
+    # Fail on critical vulnerabilities
+    - time trivy image --exit-code 1 --cache-dir .trivycache/ --severity CRITICAL --no-progress "$FULL_IMAGE_NAME"
+  cache:
+    paths:
+      - .trivycache/
+  tags:
+    - docker-runner
+
+# update:packages:
+#   stage: template
+#   extends: .git:push
+#   needs:
+#     - job: build:manifest
+#       artifacts: true
+#   script:
+#     - echo "teste"
+#   tags:
+#     - docker

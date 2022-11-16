@@ -1,0 +1,25 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  annotations:
+    meta.helm.sh/release-name: desafio-devops
+    meta.helm.sh/release-namespace: default
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: desafio-devops-podinfo
+    app.kubernetes.io/version: 6.2.3
+    helm.sh/chart: podinfo-6.2.3
+    release: prometheus-stack
+  name: desafio-devops-podinfo
+  namespace: default
+spec:
+  endpoints:
+  - interval: 15s
+    path: /metrics
+    port: http
+  namespaceSelector:
+    matchNames:
+    - default
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: desafio-devops-podinfo

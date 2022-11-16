@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    meta.helm.sh/release-name: desafio-devops
+    meta.helm.sh/release-namespace: default
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: desafio-devops-podinfo
+    app.kubernetes.io/version: 6.2.3
+    helm.sh/chart: podinfo-6.2.3
+  name: desafio-devops-podinfo
+  namespace: default
+spec:
+  ports:
+  - name: http
+    port: 9898
+    protocol: TCP
+    targetPort: http
+  - name: grpc
+    port: 9999
+    protocol: TCP
+    targetPort: grpc
+  selector:
+    app.kubernetes.io/name: desafio-devops-podinfo
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
