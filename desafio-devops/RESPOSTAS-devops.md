@@ -165,7 +165,7 @@ spec:
             storage: 10Gi
 ```
 
-Para validarmos a criação, utilizei o comando **kubectl get pv**:
+Para validar a criação, utilizei o comando **kubectl get pv**:
 
 ![Pv](imagens/pv.jpeg)
 
