@@ -77,6 +77,10 @@ Durante a configuração do cluster fiz o deploy do **ArgoCD** e outras features
       kubectl apply -f https://gitlab.com/rbsantosbr/gitops/-/raw/main/application.yaml
 ```
 
+#### Interface do ArgoCD
+
+![Argo](imagens/gitops.jpeg)
+
 
 Os manifestos da aplicação estão no Diretório [Gitops](gitops/)
 
@@ -132,4 +136,16 @@ alertmanagerConfigSelector:
     matchLabels:
       alertmanagerConfig: desafio-devops
 ```
+
+Não consegui validar o envio de mensagens para o grupo.
+
+Para configuração dos logs centralizados fiz a configuração do DataSource loki na interface do grafana, adicionando a URL: http://loki.loki:3100
+
+#### Loki logs
+![Loki](imagens/loki.jpeg)
+
+Para monitorar as métricas do app, fiz a configuração do exporter/ target, bem como criação do serviceMonitor, mas não conclui a configuração no alertManager, nem do tracing.
+
+#### Prometheus Target
+![Target](imagens/target.jpeg)
 
