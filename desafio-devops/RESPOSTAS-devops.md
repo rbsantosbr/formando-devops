@@ -71,7 +71,7 @@ Os arquivos estão no diretório [Terraform](/terraform/)
 
 Durante a configuração do cluster fiz o deploy do **ArgoCD** e outras features com o local-exec, e ja fiz a configuração do CD:
 
-```bash
+```yaml
       kubectl create ns argocd
       kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.4.16/manifests install.
       kubectl apply -f https://gitlab.com/rbsantosbr/gitops/-/raw/main/application.yaml
@@ -82,4 +82,54 @@ Os manifestos da aplicação estão no Diretório [Gitops](gitops/)
 
 Não consegui validar o HorizontalPodAutoscaling - hpa
 
-      
+
+## 4. Observabilidade
+
+```
+  -> prometheus stack (prometheus, grafana, alertmanager)
+  -> retenção de métricas 3 dias
+     -> storage local (disco), persistente
+  -> enviar alertas para um canal no telegram
+  -> logs centralizados (loki, no mesmo grafana do monitoramento)
+  -> [plus] monitorar métricas do app `request_duration_seconds`
+     -> alertar quando observar > 3 seg.
+  -> [plus] tracing (Open Telemetry)
+```
+### Deploy
+```
+helm install prometheus-stack prometheus-community/kube-prometheus-stack --version 41.7.4 --namespace monitoring --create-namespace
+helm install loki grafana/loki-stack --version 2.8.4 --namespace=loki --create-namespace
+```
+
+Para configuração do tempo de retenção, editei o StateFulset do prometheus e alterei o parâmetro **--storage.tsdb.retention.time=3d**
+
+Para criação do volume persistente utilizei as configurações de storage do prometheus que utiliza um storageClass e este por sua vez é automaticamente configurado pelo StatefulSet:
+
+```yaml
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: prometheus-stack-storage-persisted
+spec:
+  storage:
+    volumeClaimTemplate:
+      spec:
+        storageClassName: standard
+        resources:
+          requests:
+            storage: 10Gi
+```
+
+Para validarmos a criação, utilizei o comando **kubectl get pv**:
+
+![Pv](imagens/pv.jpeg)
+
+
+Para configuração dos alertas utilizei o [AlertmanagerConfig](observabilidade/alertManagerConfig.yaml) em seguida editei o **AlertManager** para utilizar as configurações:
+
+```yaml
+alertmanagerConfigSelector:
+    matchLabels:
+      alertmanagerConfig: desafio-devops
+```
+
