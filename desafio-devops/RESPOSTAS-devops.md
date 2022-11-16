@@ -170,13 +170,16 @@ Para validar a criação, utilizei o comando **kubectl get pv**:
 ![Pv](imagens/pv.jpeg)
 
 
-Para configuração dos alertas utilizei o [AlertmanagerConfig](observabilidade/alertManagerConfig.yaml) em seguida editei o **AlertManager** para utilizar as configurações:
+Para configuração dos alertas criei uma secret com os dados do bot, em seguida  utilizei o [AlertmanagerConfig](observabilidade/alertManagerConfig.yaml) e por fim atualizei o **AlertManager** para utilizar as configurações:
 
 ```yaml
 alertmanagerConfigSelector:
     matchLabels:
       alertmanagerConfig: desafio-devops
 ```
+
+#### Secret Criada
+![Secret](imagens/secret.jpeg)
 
 Não consegui validar o envio de mensagens para o grupo.
 
